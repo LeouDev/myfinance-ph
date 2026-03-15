@@ -506,6 +506,7 @@ footer {
 /* ── FLOATING PILL ── */
 .float-pill {
   position: fixed; bottom: 24px; right: 24px; z-index: 99;
+  margin-bottom: env(safe-area-inset-bottom, 0);
   background: var(--accent); color: #fff;
   border-radius: 100px; padding: 12px 22px;
   font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
@@ -751,6 +752,22 @@ footer {
 </a>
 
 <script>
+// Hide float pill when near footer
+window.addEventListener('scroll', () => {
+  const pill = document.querySelector('.float-pill');
+  const footer = document.querySelector('footer');
+  if (!pill || !footer) return;
+  const footerTop = footer.getBoundingClientRect().top;
+  const windowH = window.innerHeight;
+  if (footerTop < windowH + 60) {
+    pill.style.opacity = '0';
+    pill.style.pointerEvents = 'none';
+  } else {
+    pill.style.opacity = '1';
+    pill.style.pointerEvents = 'auto';
+  }
+});
+
 // Scroll reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => {
